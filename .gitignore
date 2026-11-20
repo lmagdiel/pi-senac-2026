@@ -1,0 +1,15 @@
+# Ambientes e arquivos locais
+.DS_Store
+Thumbs.db
+*.log
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backups e arquivos temporários
+*.bak
+*.swp
+*~

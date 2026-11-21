@@ -14,3 +14,8 @@ ALTER TABLE usuarios MODIFY COLUMN senha VARCHAR(255) NOT NULL;
 
 -- Conferência:
 -- SELECT statuschamado, COUNT(*) FROM chamados GROUP BY statuschamado;
+-- Adiciona a data de abertura em bancos antigos
+-- Execute somente se a coluna ainda não existir
+ALTER TABLE chamados
+ADD COLUMN data_abertura DATETIME NOT NULL
+DEFAULT CURRENT_TIMESTAMP;

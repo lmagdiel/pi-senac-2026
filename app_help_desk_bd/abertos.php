@@ -1,107 +1,192 @@
+
 <?php
-require_once "validador_perfil.php";
+require_once "validador_acesso.php";
 require_once "config.php";
+
+// Consultar chamados abertos
+$sql = "SELECT c.id_chamado, c.titulo, c.categoria, c.descricao,
+               u.nome AS nome_usuario
+        FROM chamados c
+        LEFT JOIN usuarios u ON c.id_usuario = u.id_usuario
+        WHERE c.statuschamado = 'Aberto'
+        ORDER BY c.id_chamado DESC";
+
+$res = $conexao->query($sql);
+$total = $res ? $res->num_rows : 0;
+
+// Informações do usuário logado
+$idUsuario = (int)($_SESSION['id'] ?? 0);
+$consultaPerfil = $conexao->query(
+    "SELECT perfil FROM usuarios WHERE id_usuario = $idUsuario"
+);
+$usuarioAtual = $consultaPerfil ? $consultaPerfil->fetch_object() : null;
+$perfil = $usuarioAtual->perfil ?? '';
+
+$tecnico = in_array($perfil, ['Tec', 'Adm'], true);
+$administrador = $perfil === 'Adm';
+
+if (!$administrador) {
+    http_response_code(403);
+    exit("Acesso restrito a administradores.");
+}
+
+$nome = htmlspecialchars($_SESSION['nome'] ?? 'Usuário', ENT_QUOTES, 'UTF-8');
+
+function seguro($valor) {
+    return htmlspecialchars((string)($valor ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
+function icone($nome) {
+    $paths = [
+        'home'=>'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+        'file-plus'=>'<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7M12 13v6m-3-3h6"/>',
+        'search'=>'<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/>',
+        'pencil'=>'<path d="m4 20 4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20zM14.5 7.5l3 3"/>',
+        'shield'=>'<path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5z"/><path d="m8 12 3 3 5-6"/>',
+        'users'=>'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 0 0 6m2 3a5 5 0 0 1 3 5v1"/>',
+        'chart'=>'<path d="M4 21V11h4v10M10 21V5h4v16M16 21v-8h4v8M2 21h20"/>',
+        'logout'=>'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2-2h4m7 14 5-5-5-5m5 5H9"/>',
+        'menu'=>'<path d="M4 6h16M4 12h16M4 18h16"/>'
+    ];
+
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.($paths[$nome] ?? '').'</svg>';
+}
+
+$itens = [
+    ['titulo'=>'Abrir chamado','icone'=>'file-plus','link'=>'abrir_chamado.php','permitido'=>true],
+    ['titulo'=>'Consultar chamados','icone'=>'search','link'=>'consultar_chamado.php','permitido'=>true],
+    ['titulo'=>'Editar chamado','icone'=>'pencil','link'=>'editar_chamado.php','permitido'=>$tecnico],
+    ['titulo'=>'Autorizar','icone'=>'shield','link'=>'autorizar_usuarios.php','permitido'=>$administrador],
+    ['titulo'=>'Usuários','icone'=>'users','link'=>'usuarios.php','permitido'=>$administrador],
+    ['titulo'=>'Relatórios','icone'=>'chart','link'=>'relatorios.php','permitido'=>$administrador]
+];
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <title>App Help Desk</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chamados Abertos | App Help Desk</title>
+<link rel="icon" href="imagens/logo.png" type="image/x-icon">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="icon" href="imagens/logo.png" type="image/x-icon">
-  <style>
-    .table-responsive {
-      overflow-x: auto;
-    }
-    .btn-sm {
-      padding: 5px;
-      min-width: auto;
-    }
-    .thead-light th {
-      background-color: #ffffff;
-      font-weight: bold;
-      text-align: center;
-    }
-    td, th {
-      text-align: center;
-    }
-    .status-aberto {
-      background-color: #ff0000;
-      color: #ffffff;
-      font-weight: bold;
-      width: 200px;
-    }
-    .total-chamados {
-      text-align: left;
-    }
-    @media (max-width: 1000px) {
-      .hide-on-small {
-        display: none;
-      }
-    }
-  </style>
+<link rel="stylesheet" href="css/abertos.css">
 </head>
 
 <body>
-  <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="home.php">
-      <img src="imagens/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-      App Help Desk
-    </a>
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="relatorios.php">VOLTAR</a>
-      </li>
-    </ul>
-  </nav>
+<div class="layout">
 
-  <div class="container">
-    <br>
-    <?php
-        $sqlTotal = "SELECT COUNT(*) as Total FROM chamados WHERE statuschamado = 'Aberto'";
-        $resTotal = $conexao->query($sqlTotal);
-        $rowTotal = $resTotal ? $resTotal->fetch_assoc() : ['Total' => 0]; 
-        $total = $rowTotal['Total'];
+<aside class="sidebar" id="sidebar">
+<div class="brand">
+<img src="imagens/logo.png" alt="Logo Help Desk">
+Help Desk
+<button class="mobile-close" type="button" aria-label="Fechar menu" onclick="toggleMenu(false)">×</button>
+</div>
 
-        $sql = "SELECT c.*, u.nome AS nome_usuario FROM chamados c LEFT JOIN usuarios u ON c.id_usuario = u.id_usuario WHERE c.statuschamado = 'Aberto' ORDER BY c.id_chamado DESC";
-        $res = $conexao->query($sql);
-        $qtd = $res ? $res->num_rows : 0;
+<nav class="nav" aria-label="Menu principal">
+<a href="home.php"><?= icone('home') ?> Início</a>
 
-        if($qtd > 0){
-            print "<div class='table-responsive'>";
-            print "<table class='table table-hover table-bordered table-sm'>";
-            print "<thead class='thead-light'>";
-            print "<tr>";
-            print "<th class='status-aberto'> Status Aberto </th>";
-            print "<th colspan=4 class='total-chamados' style='text-align: left;'> $total Chamados</th>";
-            print "</tr>";
-            print "<tr>";
-            print "<th scope='col'>Chamado</th>";
-            print "<th scope='col'>Título</th>";
-            print "<th scope='col' class='hide-on-small'>Categoria</th>";
-            print "<th scope='col' class='hide-on-small'>Descrição</th>";
-            print "<th scope='col'>Usuário</th>";
-            print "</tr>";
-            print "</thead>";
-            print "<tbody>";
+<?php foreach($itens as $item): ?>
+<?php if($item['permitido']): ?>
+<a class="<?= $item['link']==='relatorios.php'?'active':'' ?>"
+   href="<?= seguro($item['link']) ?>">
+<?= icone($item['icone']) ?>
+<?= seguro($item['titulo']) ?>
+</a>
+<?php else: ?>
+<span class="locked" title="Disponível para outro perfil">
+<?= icone($item['icone']) ?>
+<?= seguro($item['titulo']) ?>
+<span class="lock">🔒</span>
+</span>
+<?php endif; ?>
+<?php endforeach; ?>
+</nav>
 
-            while($row = $res->fetch_object()){
-                print "<tr>";
-                print "<td>" . (int)$row->id_chamado . "</td>";
-                print "<td>" . htmlspecialchars($row->titulo) . "</td>";
-                print "<td class='hide-on-small'>" . htmlspecialchars($row->categoria) . "</td>";
-                print "<td class='hide-on-small'>" . htmlspecialchars($row->descricao) . "</td>";
-                print "<td>" . htmlspecialchars($row->nome_usuario ?? 'N/D') . "</td>";
-                print "</tr>";
-            }
-            print "</tbody>";
-            print "</table>";
-            print "</div>";
-        } else {
-            print "<div class='alert alert-info text-center'>Nenhum chamado aberto no momento.</div>";
-        }
-    ?>
-  </div>
+<nav class="nav logout">
+<a href="logoff.php"><?= icone('logout') ?> Sair</a>
+</nav>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+<button class="mobile-toggle" type="button" aria-label="Abrir menu" onclick="toggleMenu(true)">
+<?= icone('menu') ?>
+</button>
+<span class="topbar-title">Help Desk</span>
+<div class="account">
+<span class="avatar" aria-hidden="true">●</span>
+<span><?= $nome ?></span>
+</div>
+</header>
+
+<div class="content">
+
+<div class="form-head">
+<span class="form-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="9"/>
+<path d="M12 7v6M12 17h.01"/>
+</svg>
+</span>
+<div>
+<h1>Chamados abertos</h1>
+<p>Visualize todos os chamados que aguardam atendimento.</p>
+</div>
+</div>
+
+<div class="form-body">
+
+<a href="relatorios.php" class="back-link">← Voltar aos relatórios</a>
+
+<div class="table-intro">
+<strong>Lista de chamados abertos</strong>
+<span><?= $total ?> chamado(s) encontrado(s)</span>
+</div>
+
+<?php if($res && $total > 0): ?>
+<div class="table-wrap">
+<table class="tickets">
+<thead>
+<tr>
+<th>Chamado</th>
+<th>Título</th>
+<th>Categoria</th>
+<th>Descrição</th>
+<th>Usuário</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<?php while($row = $res->fetch_object()): ?>
+<tr>
+<td class="id">#<?= (int)$row->id_chamado ?></td>
+<td><?= seguro($row->titulo) ?></td>
+<td><?= seguro($row->categoria) ?></td>
+<td class="descricao"><?= nl2br(seguro($row->descricao)) ?></td>
+<td><?= seguro($row->nome_usuario ?? 'Não identificado') ?></td>
+<td><span class="status">Aberto</span></td>
+</tr>
+<?php endwhile; ?>
+</tbody>
+</table>
+</div>
+<?php else: ?>
+<div class="vazio">Nenhum chamado aberto encontrado.</div>
+<?php endif; ?>
+
+</div>
+</div>
+
+</main>
+</div>
+
+<script>
+function toggleMenu(open) {
+    document.getElementById('sidebar').classList.toggle('open', open);
+}
+</script>
+
 </body>
 </html>

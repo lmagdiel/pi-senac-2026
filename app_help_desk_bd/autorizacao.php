@@ -1,33 +1,20 @@
 <?php
-require_once "validador_perfil.php";
+require_once "validador_acesso.php";
 require_once "config.php";
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$autorizar = isset($_GET['autorizar']) ? $_GET['autorizar'] : '';
-
-if ($id > 0) {
-    if ($autorizar === 'simA') {
-        $novoPerfil = 'Adm';
-        $redirectParam = 'adm';
-    } elseif ($autorizar === 'simT') {
-        $novoPerfil = 'Tec';
-        $redirectParam = 'tec';
-    } else {
-        $novoPerfil = 'Usuario';
-        $redirectParam = 'usuario';
-    }
-
-    $stmt = $conexao->prepare("UPDATE usuarios SET perfil = ? WHERE id_usuario = ?");
-    if ($stmt) {
-        $stmt->bind_param("si", $novoPerfil, $id);
-        $stmt->execute();
-        $stmt->close();
-    }
-
-    header("Location: autorizar_usuarios.php?usuario={$redirectParam}");
-    exit;
+if($_GET['autorizar'] == 'simA'){
+    $sql = "UPDATE usuarios SET perfil = 'Adm' WHERE id_usuario = {$_GET['id']}";
+    $res = $conexao->query($sql);
+    header('location: autorizar_usuarios.php?usuario=adm');
+} else if($_GET['autorizar'] == 'simT'){
+    $sql = "UPDATE usuarios SET perfil = 'Tec' WHERE id_usuario = {$_GET['id']}";
+    $res = $conexao->query($sql);
+    header('location: autorizar_usuarios.php?usuario=tec');
+} else{
+    $sql = "UPDATE usuarios SET perfil = 'Usuario' WHERE id_usuario = {$_GET['id']}";
+    $res = $conexao->query($sql);
+    header('location: autorizar_usuarios.php?usuario=usuario');
 }
-
-header("Location: autorizar_usuarios.php");
-exit;
 ?>
+
+<html>

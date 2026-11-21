@@ -2,9 +2,15 @@
 require_once "validador_acesso.php";
 require_once "config.php";
 
-$sql = "SELECT perfil FROM usuarios WHERE id_usuario = " . (int)$_SESSION['id'];
-$res = $conexao->query($sql);
-$row = $res ? $res->fetch_object() : null;
+$idUsuario = (int) $_SESSION['id'];
+
+$stmt = $conexao->prepare("SELECT perfil FROM usuarios WHERE id_usuario = ?");
+$stmt->bind_param("i", $idUsuario);
+$stmt->execute();
+
+$res = $stmt->get_result();
+$row = $res->fetch_object();
+$stmt->close();
 $perfil = $row->perfil ?? '';
 $tecnico = ($perfil === 'Tec' || $perfil === 'Adm');
 $administrador = ($perfil === 'Adm');

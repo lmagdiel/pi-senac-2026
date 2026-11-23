@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `chamados` (
   `descricaotecnico` LONGTEXT NULL,
   `statuschamado` VARCHAR(50) NOT NULL DEFAULT 'Aberto',
   `valor` DOUBLE NULL DEFAULT 0,
+  `data_abertura` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id_usuario` INT NOT NULL,
   CONSTRAINT `fkChamadoUsuario` FOREIGN KEY (`id_usuario`)
     REFERENCES `usuarios` (`id_usuario`)

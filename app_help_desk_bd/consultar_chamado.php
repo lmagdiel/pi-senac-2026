@@ -67,43 +67,7 @@ function e($valor) { return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8'
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Consultar Chamados | App Help Desk</title>
 <link rel="icon" href="imagens/logo.png" type="image/x-icon">
-<style>
-:root{--navy:#0d315d;--navy-dark:#092747;--blue:#0867d5;--text:#122b4a;--muted:#687c94;--bg:#eff5ff;--border:#e2eaf6}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--bg)}
-.layout{display:flex;min-height:100vh}.sidebar{width:224px;flex:none;background:linear-gradient(180deg,#103c70,var(--navy-dark));color:#fff;padding:22px 12px;display:flex;flex-direction:column}
-.brand{display:flex;align-items:center;gap:10px;padding:3px 10px 27px;font-size:19px;font-weight:700}.brand img{width:33px;height:33px;object-fit:contain}.nav{display:flex;flex-direction:column;gap:5px}.nav a,.nav .locked{display:flex;align-items:center;gap:12px;min-height:43px;padding:11px 12px;color:#e6f0ff;text-decoration:none;border-radius:7px;font-size:13px}.nav a:hover,.nav a.active{background:#1769c8;color:#fff}.nav .locked{opacity:.42;cursor:not-allowed}.nav svg{width:18px;height:18px;flex:none}.nav .lock{font-size:11px;margin-left:auto}.logout{margin-top:auto;border-top:1px solid #ffffff2c;padding-top:12px}
-.main{flex:1;min-width:0}.topbar{height:66px;background:linear-gradient(90deg,#0c3d78,#0961c5);display:flex;align-items:center;justify-content:space-between;padding:0 31px;color:#fff;box-shadow:0 2px 9px #123e7220}.topbar-title{font-size:16px;font-weight:700}.account{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#2d83e5;font-size:17px}
-.content{padding:0;max-width:none;margin:0;min-height:calc(100vh - 66px);background:#fff}
-.form-card{max-width:none;margin:0;background:white;border:0;border-radius:0;box-shadow:none;overflow:hidden}
-.form-head{display:flex;align-items:center;gap:12px;padding:23px 32px;background:#f7faff;border-bottom:1px solid var(--border)}
-.form-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#e8f2ff;color:var(--blue)}
-.form-icon svg{width:21px;height:21px}
-.form-head h1{font-size:19px;margin:0 0 5px}.form-head p{font-size:13px;color:var(--muted);margin:0}
-.form-body{padding:28px 32px 36px}.campo{margin-bottom:14px}label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
-input,select,textarea{display:block;width:100%;font:14px Arial,Helvetica,sans-serif;color:var(--text);border:1px solid #cedaeb;border-radius:7px;padding:9px 12px;background:#fff;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0867d51c}
-textarea{resize:vertical;min-height:78px}.acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
-.botao{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:7px;padding:10px 17px;font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
-.primario{background:var(--blue);color:white}.primario:hover{background:#0756b8}.secundario{background:#e9eff7;color:#233954}.secundario:hover{background:#dbe5f2}
-.alerta{margin:0 0 20px;padding:13px 16px;border-radius:8px;font-size:14px}.sucesso{background:#e9f9ef;color:#176a38}.erro{background:#fff0f0;color:#a52d2d}
-.mobile-toggle{display:none}.mobile-close{display:none}
-@media(max-width:850px){.sidebar{width:190px}.content{padding:0}}
-@media(max-width:650px){.layout{display:block}.sidebar{position:fixed;z-index:20;top:0;bottom:0;left:0;width:255px;transform:translateX(-100%);transition:transform .2s;box-shadow:10px 0 30px #0002}.sidebar.open{transform:translateX(0)}.mobile-close{display:block;margin-left:auto;background:none;border:0;color:#fff;font-size:25px;cursor:pointer}.mobile-toggle{display:inline-flex;align-items:center;justify-content:center;border:0;background:none;color:#fff;padding:6px;cursor:pointer}.mobile-toggle svg{width:24px;height:24px}.topbar{padding:0 14px;gap:10px}.topbar-title{margin-right:auto}.account{font-size:12px}.content{padding:0}.form-head,.form-body{padding:20px 16px}.form-head h1{font-size:19px}}
-.consulta-card{max-width:none;width:100%;min-height:calc(100vh - 66px)}
-.filtros{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin-bottom:18px}
-.filtro-pesquisa{flex:2;min-width:240px}.filtro-categoria{flex:1;min-width:170px}
-.filtros label{display:block;margin-bottom:7px}.filtros input,.filtros select{width:100%}
-.resumo-consulta{font-size:12px;color:var(--muted);margin-bottom:12px}
-.tabela-rolagem{overflow-x:auto}.tabela-chamados{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
-.tabela-chamados th{background:#edf3fb;color:#213b60;padding:13px 12px;font-size:12px;white-space:nowrap}
-.tabela-chamados td{padding:15px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-.tabela-chamados tbody tr:hover{background:#f8fbff}.numero{font-weight:700;color:var(--blue);white-space:nowrap}
-.descricao-chamado{margin-top:6px;color:var(--muted);line-height:1.45;max-width:340px;overflow-wrap:anywhere}
-.status{display:inline-block;padding:6px 9px;border-radius:20px;font-weight:700;font-size:11px;white-space:nowrap}
-.status.finalizado{background:#dcf7e5;color:#14733b}.status.andamento{background:#e0efff;color:#145caa}.status.aberto{background:#fff1cf;color:#97610b}.status.neutro{background:#eef1f5;color:#53657b}
-.vazio{text-align:center;color:var(--muted);padding:24px}.vazio[hidden]{display:none}
-@media(max-width:650px){.filtros{display:block}.filtro-categoria{margin-top:12px}.tabela-chamados{min-width:820px}}
-</style>
+<link rel="stylesheet" href="css/consultar_chamado.css">
 </head>
 <body>
 <div class="layout">

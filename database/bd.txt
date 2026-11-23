@@ -51,6 +51,9 @@ alter table chamados
 
  alter table chamados
  add valor double;
+
+ alter table chamados
+ add data_abertura datetime not null default current_timestamp;
  
  ALTER TABLE chamados CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
  -------------------------------------------------------------------------------------------

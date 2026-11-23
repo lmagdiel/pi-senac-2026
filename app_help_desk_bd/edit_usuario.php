@@ -74,69 +74,7 @@ $itens = [
 <title>Editar Usuário | App Help Desk</title>
 <link rel="icon" href="imagens/logo.png" type="image/x-icon">
 
-<style>
-:root{--navy:#0d315d;--navy-dark:#092747;--blue:#0867d5;--text:#122b4a;--muted:#687c94;--bg:#eff5ff;--border:#e2eaf6}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--bg)}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:224px;flex:none;background:linear-gradient(180deg,#103c70,var(--navy-dark));color:#fff;padding:22px 12px;display:flex;flex-direction:column}
-.brand{display:flex;align-items:center;gap:10px;padding:3px 10px 27px;font-size:19px;font-weight:700}
-.brand img{width:33px;height:33px;object-fit:contain}
-.nav{display:flex;flex-direction:column;gap:5px}
-.nav a,.nav .locked{display:flex;align-items:center;gap:12px;min-height:43px;padding:11px 12px;color:#e6f0ff;text-decoration:none;border-radius:7px;font-size:13px}
-.nav a:hover,.nav a.active{background:#1769c8;color:#fff}
-.nav .locked{opacity:.42;cursor:not-allowed}
-.nav svg{width:18px;height:18px;flex:none}
-.nav .lock{font-size:11px;margin-left:auto}
-.logout{margin-top:auto;border-top:1px solid #ffffff2c;padding-top:12px}
-.main{flex:1;min-width:0}
-.topbar{height:66px;background:linear-gradient(90deg,#0c3d78,#0961c5);display:flex;align-items:center;justify-content:space-between;padding:0 31px;color:#fff;box-shadow:0 2px 9px #123e7220}
-.topbar-title{font-size:16px;font-weight:700}
-.account{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
-.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#2d83e5;font-size:17px}
-
-.content{padding:0;max-width:none;margin:0;min-height:calc(100vh - 66px);background:#fff}
-.form-head{display:flex;align-items:center;gap:12px;padding:22px 28px;background:#f7faff;border-bottom:1px solid var(--border)}
-.form-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#e8f2ff;color:var(--blue)}
-.form-icon svg{width:21px;height:21px}
-.form-head h1{font-size:19px;margin:0 0 5px}
-.form-head p{font-size:13px;color:var(--muted);margin:0}
-.form-body{padding:26px 28px 30px}
-
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
-.form-group{display:flex;flex-direction:column;gap:8px}
-.form-group label{font-size:13px;font-weight:700;color:#294363}
-.form-control{width:100%;height:44px;padding:10px 13px;border:1px solid #d7e2f0;border-radius:7px;font-family:inherit;font-size:14px;color:var(--text);background:#fff;outline:none}
-.form-control:focus{border-color:#3486e6;box-shadow:0 0 0 3px #3486e622}
-.form-control:disabled{background:#f2f6fc;color:#71849d;cursor:not-allowed}
-.form-group.full{grid-column:1/-1}
-.form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:30px;padding-top:22px;border-top:1px solid var(--border)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-width:130px;height:42px;padding:0 20px;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}
-.btn-cancelar{background:#f0f4fa;color:#425a76;border:1px solid #dce5f0}
-.btn-cancelar:hover{background:#e4ebf5}
-.btn-salvar{background:#0867d5;color:#fff;border:1px solid #0867d5}
-.btn-salvar:hover{background:#0758b7}
-.mobile-toggle,.mobile-close{display:none}
-
-@media(max-width:850px){
-.sidebar{width:190px}
-}
-@media(max-width:650px){
-.layout{display:block}
-.sidebar{position:fixed;z-index:20;top:0;bottom:0;left:0;width:255px;transform:translateX(-100%);transition:transform .2s;box-shadow:10px 0 30px #0002}
-.sidebar.open{transform:translateX(0)}
-.mobile-close{display:block;margin-left:auto;background:none;border:0;color:#fff;font-size:25px;cursor:pointer}
-.mobile-toggle{display:inline-flex;align-items:center;justify-content:center;border:0;background:none;color:#fff;padding:6px;cursor:pointer}
-.mobile-toggle svg{width:24px;height:24px}
-.topbar{padding:0 14px;gap:10px}
-.topbar-title{margin-right:auto}
-.account{font-size:12px}
-.form-head,.form-body{padding:19px}
-.form-grid{grid-template-columns:1fr}
-.form-actions{flex-direction:column-reverse}
-.btn{width:100%}
-}
-</style>
+<link rel="stylesheet" href="css/edit_usuario.css">
 </head>
 
 <body>

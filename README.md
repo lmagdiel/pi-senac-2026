@@ -4,6 +4,8 @@ Sistema web para abertura, acompanhamento e gerenciamento de chamados de suporte
 
 Projeto desenvolvido como parte do **Projeto Integrador do SENAC – 2026**.
 
+**Video demonstrativo:** https://drive.google.com/file/d/1OHOq2RM3VhpzyWO90FcfayuH7HHP8HDD/view?usp=sharing
+
 ## Sobre o projeto
 
 O App Help Desk centraliza o registro e o acompanhamento de solicitações de suporte técnico. Usuários podem abrir chamados e consultar suas solicitações, enquanto técnicos e administradores podem acompanhar e atualizar os atendimentos de acordo com suas permissões.
@@ -126,10 +128,3 @@ O script atualiza o status legado `Andamento` para `Em andamento` e amplia o cam
 - A pasta `app_help_desk_bd_cima` contém lógica sensível e deve permanecer fora da raiz pública do servidor sempre que a configuração do ambiente permitir.
 - O `.htaccess` ajuda a bloquear o acesso direto a essa pasta em servidores Apache, mas não substitui uma configuração segura do servidor.
 - Utilize HTTPS e credenciais fortes em ambientes publicados.
-
-## Projeto acadêmico
-
-Projeto Integrador – SENAC, 2026.
-
-**Repositório:** https://github.com/lmagdiel/pi-senac-2026
-**Video demonstrativo:** https://drive.google.com/file/d/1OHOq2RM3VhpzyWO90FcfayuH7HHP8HDD/view?usp=sharing

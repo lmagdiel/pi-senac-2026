@@ -132,3 +132,4 @@ O script atualiza o status legado `Andamento` para `Em andamento` e amplia o cam
 Projeto Integrador – SENAC, 2026.
 
 **Repositório:** https://github.com/lmagdiel/pi-senac-2026
+**Video demonstrativo:** https://drive.google.com/file/d/1OHOq2RM3VhpzyWO90FcfayuH7HHP8HDD/view?usp=sharing
